@@ -74,7 +74,7 @@ python cli.py action-three
 
 ### Step 1 — Rename the actions in `prompts/interactive.py`
 
-Open `/Users/francobenitez/Documents/Prog/Proyectos/cliSoft/prompts/interactive.py` and update the `_ACTIONS` dict to use labels that match your domain:
+Open `interactive.py` and update the `_ACTIONS` dict to use labels that match your domain:
 
 ```python
 # Before
