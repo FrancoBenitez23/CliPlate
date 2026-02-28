@@ -1,5 +1,7 @@
 # CliPlate
 
+![CliPlate preview](freeze.png)
+
 A reusable Python CLI boilerplate built with [Rich](https://github.com/Textualize/rich) and [InquirerPy](https://github.com/kazhala/InquirerPy). Drop it into any project and replace the placeholder actions with your own logic to get a fully styled, interactive terminal application in minutes.
 
 ---
