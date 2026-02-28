@@ -46,15 +46,26 @@ cliSoft/
 
 ## Getting Started
 
+**Create and activate a virtual environment (optional but recommended)**
+
+```bash
+# Create and activate a virtual environment (optional but recommended)
+python -m venv env
+source env/bin/activate        # macOS/Linux
+env\Scripts\activate           # Windows
+```
+
 **Install dependencies**
 
 ```bash
+# Install dependencies
 pip install -r requirements.txt
 ```
 
 **Run the CLI**
 
 ```bash
+# Run
 python cli.py
 ```
 
