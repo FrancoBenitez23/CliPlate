@@ -38,11 +38,35 @@ cliSoft/
 │   └── interactive.py        # All InquirerPy flows; dispatches to commands/
 ├── ui/
 │   └── output.py             # Single Console() instance; all output helpers
-└── commands/
-    ├── action_one.py         # Template action one   -> ActionOneResult dataclass
-    ├── action_two.py         # Template action two   -> ActionTwoResult dataclass
-    └── action_three.py       # Template action three -> ActionThreeResult dataclass
+├── commands/
+│   ├── action_one.py         # Template action one   -> ActionOneResult dataclass
+│   ├── action_two.py         # Template action two   -> ActionTwoResult dataclass
+│   └── action_three.py       # Template action three -> ActionThreeResult dataclass
+└── exceptions/               # Structured exception hierarchy (see below)
+    ├── __init__.py
+    ├── cli.py
+    ├── command.py
+    ├── prompt.py
+    └── ui.py
 ```
+
+---
+
+## Exception Hierarchy
+
+The `exceptions/` package provides a typed, layer-aware error hierarchy so adapters can distinguish where a failure originated.
+
+```
+CLISoftError
+├── CLIError          — argument parsing issues
+├── CommandError      — failures inside commands/
+├── PromptError       — InquirerPy flow problems (e.g. user aborts)
+└── UIError           — rendering failures
+```
+
+All exceptions carry a `message` string and a `layer` tag. `cli.py` catches them in order — `PromptAbortedError` first (clean exit), then `CommandError`, then the generic `CLISoftError` base — before falling through to `KeyboardInterrupt`.
+
+Each `commands/action_*.py` and `prompts/interactive.py` contains inline `TODO` comments showing exactly how to raise the right exception when replacing the simulated logic with real code.
 
 ---
 
