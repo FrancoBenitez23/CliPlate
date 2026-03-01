@@ -98,6 +98,13 @@ def print_table(title: str, columns: list[tuple[str, str]], rows: list[list]) ->
     table = Table(title=title, box=box.SIMPLE_HEAVY, show_lines=False)
     for name, style in columns:
         table.add_column(name, style=style, no_wrap=True)
-    for row in rows:
+    expected = len(columns)
+    for idx, row in enumerate(rows):
+        received = len(row)
+        if received != expected:
+            print_error(
+                f"Row {idx} has {received} value(s) but {expected} column(s) were expected."
+            )
+            return
         table.add_row(*[str(v) for v in row])
     console.print(table)
