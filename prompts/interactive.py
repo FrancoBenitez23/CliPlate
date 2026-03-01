@@ -18,6 +18,7 @@ from typing import Callable
 
 from InquirerPy import inquirer
 
+from exceptions import PromptAbortedError
 from ui.output import (
     console,
     print_welcome,
@@ -57,6 +58,8 @@ def start_interactive() -> None:
             break
 
         # Call the handler directly — no string lookup needed.
+        # PromptAbortedError is allowed to propagate to cli.py, which
+        # catches it and exits cleanly with a warning message.
         handler()
         # Print a blank line between flows for visual breathing room.
         console.print()
@@ -72,6 +75,11 @@ def _flow_action_one() -> None:
     console.print()
     # Customize: replace this message with a description of what Action One does.
     print_info("Action One — add your logic here.")
+    # TODO: wrap inquirer calls with:
+    # try:
+    #     answer = inquirer.text(...).execute()
+    # except KeyboardInterrupt:
+    #     raise PromptAbortedError(flow_name="action-one")
     inquirer.select(
         message="",
         choices=["← Go back"],
@@ -86,6 +94,11 @@ def _flow_action_two() -> None:
     console.print()
     # Customize: replace this message with a description of what Action Two does.
     print_info("Action Two — add your logic here.")
+    # TODO: wrap inquirer calls with:
+    # try:
+    #     answer = inquirer.text(...).execute()
+    # except KeyboardInterrupt:
+    #     raise PromptAbortedError(flow_name="action-two")
     inquirer.select(
         message="",
         choices=["← Go back"],
@@ -100,6 +113,11 @@ def _flow_action_three() -> None:
     console.print()
     # Customize: replace this message with a description of what Action Three does.
     print_info("Action Three — add your logic here.")
+    # TODO: wrap inquirer calls with:
+    # try:
+    #     answer = inquirer.text(...).execute()
+    # except KeyboardInterrupt:
+    #     raise PromptAbortedError(flow_name="action-three")
     inquirer.select(
         message="",
         choices=["← Go back"],

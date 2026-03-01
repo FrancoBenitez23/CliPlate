@@ -13,6 +13,8 @@ How to add a new subcommand:
 import argparse
 import sys
 
+from exceptions import CLISoftError, CommandError, PromptAbortedError
+
 
 def build_parser() -> argparse.ArgumentParser:
     """Build and return the top-level argument parser with all subcommands."""
@@ -91,6 +93,18 @@ def main() -> None:
             from prompts.interactive import start_interactive
             start_interactive()
 
+    except PromptAbortedError:
+        from ui.output import print_warn
+        print_warn("Action cancelled.")
+        sys.exit(0)
+    except CommandError as exc:
+        from ui.output import print_error
+        print_error(exc.message)
+        sys.exit(1)
+    except CLISoftError as exc:
+        from ui.output import print_error
+        print_error(exc.message)
+        sys.exit(1)
     except KeyboardInterrupt:
         from ui.output import console
         console.print("\n[dim]Interrupted. Goodbye![/dim]")

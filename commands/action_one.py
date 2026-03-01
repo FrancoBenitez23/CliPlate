@@ -75,8 +75,17 @@ def run_action_one(target: str, option: int = 10) -> ActionOneResult:
     # ── TODO: replace this block with real logic ──────────────────────────────
     # Example shape of real logic:
     #
+    #   from exceptions import CommandExecutionError
     #   try:
     #       data = your_library.run(target, limit=option)
+    #   except Exception as exc_raw:
+    #       e = CommandExecutionError(
+    #           str(exc_raw), command_name="action-one", original=exc_raw
+    #       )
+    #       return ActionOneResult(error=e.message)
+    #
+    # Alternatively, use the plain string form if you prefer not to raise:
+    #
     #   except YourError as exc:
     #       return ActionOneResult(error=str(exc))
     #
