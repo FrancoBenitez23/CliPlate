@@ -67,6 +67,18 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _handle_clisofterror(exc: CLISoftError) -> None:
+    """Print a CLISoftError message and exit with code 1.
+
+    Extracted as a helper so both the `except CLISoftError` handler and the
+    `except Exception` fallback funnel through the same code path without
+    requiring nested try/except blocks.
+    """
+    from ui.output import print_error
+    print_error(exc.message)
+    sys.exit(1)
+
+
 def main() -> None:
     """Parse arguments and dispatch to the appropriate command or interactive mode."""
     parser = build_parser()
@@ -98,17 +110,25 @@ def main() -> None:
         print_warn("Action cancelled.")
         sys.exit(0)
     except CommandError as exc:
-        from ui.output import print_error
-        print_error(exc.message)
-        sys.exit(1)
+        _handle_clisofterror(exc)
     except CLISoftError as exc:
-        from ui.output import print_error
-        print_error(exc.message)
-        sys.exit(1)
+        _handle_clisofterror(exc)
     except KeyboardInterrupt:
         from ui.output import console
         console.print("\n[dim]Interrupted. Goodbye![/dim]")
         sys.exit(0)
+    except Exception as exc:
+        # Wrap any unhandled exception as a CLISoftError and route it through
+        # the unified handler.  `raise ... from exc` is NOT used here because
+        # Python does not allow sibling except-clauses to catch each other;
+        # calling the helper directly achieves the same unified path.
+        # __cause__ is attached manually so the chain is preserved for debugging.
+        wrapped = CLISoftError(
+            f"Unexpected error: {type(exc).__name__}: {exc}",
+            layer="cli",
+        )
+        wrapped.__cause__ = exc
+        _handle_clisofterror(wrapped)
 
 
 if __name__ == "__main__":

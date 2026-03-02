@@ -1,0 +1,12 @@
+__pycache__
+CLAUDE.md
+.claude/
+env/
+.env
+*.env
+*.log
+*.key
+*.pem
+*.sqlite
+*.db
+secrets/

@@ -13,6 +13,7 @@ To customize the visual style:
 from contextlib import contextmanager
 
 from rich.console import Console
+from rich.markup import escape
 from rich.panel import Panel
 from rich.table import Table
 from rich.progress import SpinnerColumn, TextColumn, Progress
@@ -33,22 +34,22 @@ SYM_WARN    = "[bold yellow]⚠[/bold yellow]"
 
 def print_error(msg: str) -> None:
     """Print a red error message prefixed with the error symbol (✖)."""
-    console.print(f"{SYM_ERROR}  {msg}")
+    console.print(f"{SYM_ERROR}  {escape(msg)}")
 
 
 def print_success(msg: str) -> None:
     """Print a green success message prefixed with the success symbol (✔)."""
-    console.print(f"{SYM_SUCCESS}  {msg}")
+    console.print(f"{SYM_SUCCESS}  {escape(msg)}")
 
 
 def print_info(msg: str) -> None:
     """Print a blue informational message prefixed with the info symbol (ℹ)."""
-    console.print(f"{SYM_INFO}  {msg}")
+    console.print(f"{SYM_INFO}  {escape(msg)}")
 
 
 def print_warn(msg: str) -> None:
     """Print a yellow warning message prefixed with the warning symbol (⚠)."""
-    console.print(f"{SYM_WARN}  {msg}")
+    console.print(f"{SYM_WARN}  {escape(msg)}")
 
 
 def print_welcome(title: str, subtitle: str = "") -> None:
@@ -58,9 +59,9 @@ def print_welcome(title: str, subtitle: str = "") -> None:
         title:    Main heading displayed in bold cyan inside the panel.
         subtitle: Optional secondary line displayed in dim text below the title.
     """
-    content = f"[bold cyan]{title}[/bold cyan]"
+    content = f"[bold cyan]{escape(title)}[/bold cyan]"
     if subtitle:
-        content += f"\n[dim]{subtitle}[/dim]"
+        content += f"\n[dim]{escape(subtitle)}[/dim]"
     console.print(Panel(content, box=box.ROUNDED, border_style="cyan", padding=(1, 4)))
 
 
@@ -95,9 +96,9 @@ def print_table(title: str, columns: list[tuple[str, str]], rows: list[list]) ->
         rows:    List of row value lists; each inner list must have the same
                  length as `columns`.  All values are coerced to strings.
     """
-    table = Table(title=title, box=box.SIMPLE_HEAVY, show_lines=False)
+    table = Table(title=escape(title), box=box.SIMPLE_HEAVY, show_lines=False)
     for name, style in columns:
-        table.add_column(name, style=style, no_wrap=True)
+        table.add_column(escape(name), style=style, no_wrap=True)
     expected = len(columns)
     for idx, row in enumerate(rows):
         received = len(row)
@@ -106,5 +107,5 @@ def print_table(title: str, columns: list[tuple[str, str]], rows: list[list]) ->
                 f"Row {idx} has {received} value(s) but {expected} column(s) were expected."
             )
             return
-        table.add_row(*[str(v) for v in row])
+        table.add_row(*[escape(str(v)) for v in row])
     console.print(table)

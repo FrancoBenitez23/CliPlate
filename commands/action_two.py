@@ -55,6 +55,17 @@ def run_action_two(target: str, option: int = 10) -> ActionTwoResult:
     Returns:
         ActionTwoResult populated with either data or an error message.
     """
+    if option <= 0:
+        return ActionTwoResult(
+            iterations=0,
+            total_value=0.0,
+            avg_value=0.0,
+            min_value=0.0,
+            max_value=0.0,
+            values=[],
+            error=f"option must be a positive integer, got {option}",
+        )
+
     # Simulate work so the spinner is visible during the demo.
     # Remove or replace this line with real I/O / computation.
     time.sleep(1.5)
