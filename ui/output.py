@@ -73,17 +73,24 @@ def spinner(message: str):
         with spinner("Loading data..."):
             result = do_expensive_work()
 
+    The try/finally guarantees progress.stop() runs even if the body raises,
+    so the terminal is always left in a clean state.
+
     Args:
         message: Text displayed next to the spinner animation.
     """
-    with Progress(
+    progress = Progress(
         SpinnerColumn(),
         TextColumn("[progress.description]{task.description}"),
         console=console,
         transient=True,  # Clears the spinner line when the block exits.
-    ) as progress:
+    )
+    try:
+        progress.start()
         progress.add_task(description=message, total=None)
         yield
+    finally:
+        progress.stop()
 
 
 def print_table(title: str, columns: list[tuple[str, str]], rows: list[list]) -> None:
