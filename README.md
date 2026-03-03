@@ -84,9 +84,15 @@ env\Scripts\activate           # Windows
 **Install dependencies**
 
 ```bash
-# Install dependencies
+# Development / loose install (resolves latest compatible versions)
 pip install -r requirements.txt
+
+# Reproducible install (exact versions used during development)
+pip install -r requirements-lock.txt
 ```
+
+> Use `requirements.txt` when setting up a new environment where you want flexibility.
+> Use `requirements-lock.txt` to reproduce the exact environment used to build this template (pinned transitive deps included).
 
 **Run the CLI**
 
