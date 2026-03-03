@@ -116,22 +116,22 @@ Open `interactive.py` and update the `_ACTIONS` dict to use labels that match yo
 ```python
 # Before
 _ACTIONS = {
-    "Action One":   "_flow_action_one",
-    "Action Two":   "_flow_action_two",
-    "Action Three": "_flow_action_three",
+    "Action One":   _flow_action_one,
+    "Action Two":   _flow_action_two,
+    "Action Three": _flow_action_three,
     "Exit":         None,
 }
 
 # After (example)
 _ACTIONS = {
-    "Scan dependencies": "_flow_scan",
-    "Deploy":            "_flow_deploy",
-    "Migrate database":  "_flow_migrate",
+    "Scan dependencies": _flow_scan,
+    "Deploy":            _flow_deploy,
+    "Migrate database":  _flow_migrate,
     "Exit":              None,
 }
 ```
 
-Rename the corresponding `_flow_*` functions to match, and update the welcome panel title in `start_interactive()`.
+Values are **direct callable references**, not strings. Rename the corresponding `_flow_*` functions to match, then update the welcome panel title in `start_interactive()`.
 
 ### Step 2 — Add real logic in `commands/action_*.py`
 
