@@ -86,19 +86,89 @@ def main() -> None:
 
     try:
         if args.command == "action-one":
-            from ui.output import print_info
-            # Customize: replace this message with real non-interactive logic for action one.
-            print_info("Run in interactive mode to use Action One: python cli.py")
+            from commands.action_one import run_action_one
+            from ui.output import print_error, print_success, print_table, spinner
+
+            with spinner(f"Running Action One on '{args.target}'..."):
+                result = run_action_one(args.target)
+
+            if result.error:
+                print_error(result.error)
+                sys.exit(1)
+
+            # Customize: update column headers and row mapping to match your dataclass fields.
+            print_table(
+                f"Action One — {args.target}",
+                [
+                    ("Calls",    "bold cyan"),
+                    ("TotTime",  "white"),
+                    ("CumTime",  "white"),
+                    ("PerCall",  "dim"),
+                    ("Filename", "dim"),
+                ],
+                [
+                    [r["label"], r["value_a"], r["value_b"], r["value_c"], r["identifier"]]
+                    for r in result.rows
+                ],
+            )
+            print_success(f"Done — {result.total_count:,} calls, {result.total_time:.4f}s total")
 
         elif args.command == "action-two":
-            from ui.output import print_info
-            # Customize: replace this message with real non-interactive logic for action two.
-            print_info("Run in interactive mode to use Action Two: python cli.py")
+            from commands.action_two import run_action_two
+            from ui.output import print_error, print_success, print_table, spinner
+
+            with spinner(f"Running Action Two on '{args.target}'..."):
+                result = run_action_two(args.target)
+
+            if result.error:
+                print_error(result.error)
+                sys.exit(1)
+
+            # Customize: update metric labels and value formatting to match your dataclass fields.
+            print_table(
+                f"Action Two — {args.target}",
+                [
+                    ("Metric", "bold cyan"),
+                    ("Value",  "white"),
+                ],
+                [
+                    ["Iterations", str(result.iterations)],
+                    ["Total",      f"{result.total_value:.4f}"],
+                    ["Average",    f"{result.avg_value:.6f}"],
+                    ["Min",        f"{result.min_value:.4f}"],
+                    ["Max",        f"{result.max_value:.4f}"],
+                ],
+            )
+            print_success(f"Done — {result.iterations} iterations on '{args.target}'")
 
         elif args.command == "action-three":
-            from ui.output import print_info
-            # Customize: replace this message with real non-interactive logic for action three.
-            print_info("Run in interactive mode to use Action Three: python cli.py")
+            from commands.action_three import run_action_three
+            from ui.output import print_error, print_success, print_table, spinner
+
+            with spinner(f"Running Action Three on '{args.target}'..."):
+                result = run_action_three(args.target)
+
+            if result.error:
+                print_error(result.error)
+                sys.exit(1)
+
+            # Customize: update column headers and item field access to match your dataclass fields.
+            print_table(
+                f"Action Three — {args.target}",
+                [
+                    ("Source",    "bold cyan"),
+                    ("Line",      "white"),
+                    ("Size (KB)", "white"),
+                    ("Count",     "dim"),
+                ],
+                [
+                    [item.source, str(item.position), f"{item.size_kb:.2f}", str(item.count)]
+                    for item in result.items
+                ],
+            )
+            print_success(
+                f"Done — peak {result.peak_value:.2f} KB, current {result.current_value:.2f} KB"
+            )
 
         else:
             # No subcommand provided — fall through to interactive mode.
